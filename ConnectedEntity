@@ -1,0 +1,77 @@
+{
+  "name": "ConnectedEntity",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Entity display name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "government",
+        "banking",
+        "retail",
+        "utilities",
+        "insurance",
+        "healthcare",
+        "telecom"
+      ],
+      "description": "Entity category"
+    },
+    "api_protocol": {
+      "type": "string",
+      "enum": [
+        "REST",
+        "SOAP",
+        "GraphQL",
+        "RPA"
+      ],
+      "description": "API communication protocol"
+    },
+    "endpoint_url": {
+      "type": "string",
+      "description": "API endpoint URL"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "pending_verification"
+      ],
+      "default": "active",
+      "description": "Connection status"
+    },
+    "token_valid": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the API token/handshake is valid"
+    },
+    "last_sync_status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failed",
+        "pending",
+        "never_synced"
+      ],
+      "default": "never_synced",
+      "description": "Status of the last sync attempt"
+    },
+    "last_sync_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last sync timestamp"
+    },
+    "icon_name": {
+      "type": "string",
+      "description": "Lucide icon name for display"
+    }
+  },
+  "required": [
+    "name",
+    "category",
+    "api_protocol"
+  ]
+}
