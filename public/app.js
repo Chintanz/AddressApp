@@ -4,6 +4,9 @@ const profileFormIds = ['full_name','email','phone','address_line1','address_lin
 const output = document.getElementById('output');
 const entitiesDiv = document.getElementById('entities');
 const selectAllBtn = document.getElementById('selectAllBtn');
+const retryFailBtn = document.getElementById('retryFailBtn');
+const retryInfo = document.getElementById('retryInfo');
+let lastFailedEntityIds = [];
 
 async function loadProfile() {
   const profile = await getJson('/api/profile');
@@ -49,9 +52,45 @@ document.getElementById('syncBtn').onclick = async () => {
   }
   if (d.events && d.events.length > 0) {
     summary += '\nEntities updated:\n';
+    lastFailedEntityIds = [];
     d.events.forEach((e) => {
       summary += `  - ${e.entity_name} (${e.entity_id}) => ${e.status} (${e.protocol_used}, code ${e.response_code})\n`;
+      if (e.status === 'failed') lastFailedEntityIds.push(e.entity_id);
     });
+    if (lastFailedEntityIds.length > 0) {
+      retryInfo.innerText = `Retry available for ${lastFailedEntityIds.length} failed entities.`;
+      retryFailBtn.disabled = false;
+    } else {
+      retryInfo.innerText = 'All entities synced successfully.';
+      retryFailBtn.disabled = true;
+    }
+  }
+  output.innerText = summary;
+  await loadProfile();
+};
+
+retryFailBtn.onclick = async () => {
+  if (!lastFailedEntityIds.length) {
+    retryInfo.innerText = 'No failed batch to retry.';
+    return;
+  }
+  const res = await fetch('/api/sync', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ selectedEntityIds:lastFailedEntityIds, syncType:'address' }) });
+  const d = await res.json();
+  let summary = `Retry batch ${d.batch_id}\nSuccess: ${d.results.filter(r => r.status === 'success').length} / ${d.results.length}\n`;
+  if (d.events && d.events.length > 0) {
+    summary += '\nRetry events:\n';
+    lastFailedEntityIds = [];
+    d.events.forEach((e) => {
+      summary += `  - ${e.entity_name} (${e.entity_id}) => ${e.status} (${e.protocol_used}, code ${e.response_code})\n`;
+      if (e.status === 'failed') lastFailedEntityIds.push(e.entity_id);
+    });
+    if (lastFailedEntityIds.length > 0) {
+      retryInfo.innerText = `Retry still required for ${lastFailedEntityIds.length} entities.`;
+      retryFailBtn.disabled = false;
+    } else {
+      retryInfo.innerText = 'Retry succeeded for all failed entities.';
+      retryFailBtn.disabled = true;
+    }
   }
   output.innerText = summary;
   await loadProfile();
