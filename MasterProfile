@@ -1,0 +1,59 @@
+{
+  "name": "MasterProfile",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "User's full legal name"
+    },
+    "email": {
+      "type": "string",
+      "description": "Primary email address"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Primary phone number"
+    },
+    "address_line1": {
+      "type": "string",
+      "description": "Street address line 1"
+    },
+    "address_line2": {
+      "type": "string",
+      "description": "Street address line 2"
+    },
+    "city": {
+      "type": "string",
+      "description": "City"
+    },
+    "state_province": {
+      "type": "string",
+      "description": "State or province"
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Postal/ZIP code"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country"
+    },
+    "biometric_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether identity is biometric-verified"
+    },
+    "last_sync_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time profile was synced to entities"
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "address_line1",
+    "city",
+    "country"
+  ]
+}
