@@ -1,0 +1,71 @@
+{
+  "name": "SyncEvent",
+  "type": "object",
+  "properties": {
+    "entity_id": {
+      "type": "string",
+      "description": "ID of the connected entity"
+    },
+    "entity_name": {
+      "type": "string",
+      "description": "Name of the connected entity"
+    },
+    "sync_type": {
+      "type": "string",
+      "enum": [
+        "address",
+        "phone",
+        "email",
+        "full_profile"
+      ],
+      "description": "Type of data synced"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "in_progress",
+        "success",
+        "failed",
+        "timeout"
+      ],
+      "description": "Sync status"
+    },
+    "protocol_used": {
+      "type": "string",
+      "enum": [
+        "REST",
+        "SOAP",
+        "GraphQL",
+        "RPA"
+      ],
+      "description": "Protocol used for sync"
+    },
+    "response_code": {
+      "type": "number",
+      "description": "HTTP response code"
+    },
+    "duration_ms": {
+      "type": "number",
+      "description": "Duration in milliseconds"
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Error message if failed"
+    },
+    "data_payload_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the data payload for integrity"
+    },
+    "batch_id": {
+      "type": "string",
+      "description": "Batch ID for grouped sync operations"
+    }
+  },
+  "required": [
+    "entity_id",
+    "entity_name",
+    "sync_type",
+    "status"
+  ]
+}
