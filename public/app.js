@@ -6,6 +6,7 @@ const entitiesDiv = document.getElementById('entities');
 const selectAllBtn = document.getElementById('selectAllBtn');
 const retryFailBtn = document.getElementById('retryFailBtn');
 const retryInfo = document.getElementById('retryInfo');
+const loadProfileBtn = document.getElementById('loadProfile');
 let lastFailedEntityIds = [];
 
 async function loadProfile() {
@@ -18,35 +19,15 @@ async function loadEntities() {
   const entities = await getJson('/api/entities');
   entitiesDiv.innerHTML = '';
   entities.forEach((e) => {
-    const div = document.createElement('div');
-    div.innerHTML = `<label><input class='entity-checkbox' type='checkbox' value='${e.id}' /> ${e.name} (${e.api_protocol}) [${e.status}]</label>`;
-    entitiesDiv.appendChild(div);
+    const row = document.createElement('div');
+    row.className = 'entity-item';
+    row.innerHTML = `<div class='entity-info'><label><input class='entity-checkbox' type='checkbox' value='${e.id}'> <strong>${e.name}</strong> <span class='tag'>${e.category}</span></label></div><div>${e.api_protocol}</div>`;
+    entitiesDiv.appendChild(row);
   });
 }
 
-selectAllBtn.onclick = () => {
-  const checkboxes = document.querySelectorAll('.entity-checkbox');
-  checkboxes.forEach((cb) => { cb.checked = true; });
-};
-
-document.getElementById('saveProfile').onclick = async () => {
-  const body = {};
-  profileFormIds.forEach((id) => { body[id] = document.getElementById(id).value; });
-  const res = await fetch('/api/profile', { method:'PUT', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
-  const d = await res.json();
-  output.innerText = JSON.stringify(d, null, 2);
-  await loadProfile();
-};
-
-document.getElementById('syncBtn').onclick = async () => {
-  const selected = Array.from(document.querySelectorAll('#entities input:checked')).map((i) => i.value);
-  if (!selected.length) {
-    output.innerText = 'Select at least one entity';
-    return;
-  }
-  const res = await fetch('/api/sync', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ selectedEntityIds:selected, syncType:'address' }) });
-  const d = await res.json();
-  let summary = `Batch ${d.batch_id}\nSuccess: ${d.results.filter(r => r.status === 'success').length} / ${d.results.length}\n`;
+function renderSummary(d, header) {
+  let summary = `${header}\nBatch ${d.batch_id}\nSuccess: ${d.results.filter(r => r.status === 'success').length} / ${d.results.length}\n`;
   if (d.results.some((r) => r.status === 'failed')) {
     summary += 'Failed: ' + d.results.filter((r) => r.status === 'failed').length + '\n';
   }
@@ -66,33 +47,46 @@ document.getElementById('syncBtn').onclick = async () => {
     }
   }
   output.innerText = summary;
+}
+
+selectAllBtn.onclick = () => {
+  document.querySelectorAll('.entity-checkbox').forEach((cb) => { cb.checked = true; });
+};
+
+loadProfileBtn.onclick = async () => {
+  await loadProfile();
+  output.innerText = 'Profile refreshed';
+};
+
+document.getElementById('saveProfile').onclick = async () => {
+  const body = {};
+  profileFormIds.forEach((id) => { body[id] = document.getElementById(id).value; });
+  const res = await fetch('/api/profile', { method:'PUT', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+  const d = await res.json();
+  output.innerText = `Saved profile successfully.\n${JSON.stringify(d.profile, null, 2)}`;
+  await loadProfile();
+};
+
+document.getElementById('syncBtn').onclick = async () => {
+  const selected = Array.from(document.querySelectorAll('#entities .entity-checkbox:checked')).map((i) => i.value);
+  if (!selected.length) {
+    output.innerText = 'Select at least one entity to sync.';
+    return;
+  }
+  const res = await fetch('/api/sync', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ selectedEntityIds:selected, syncType:'address' }) });
+  const d = await res.json();
+  renderSummary(d, 'Sync Result:');
   await loadProfile();
 };
 
 retryFailBtn.onclick = async () => {
   if (!lastFailedEntityIds.length) {
-    retryInfo.innerText = 'No failed batch to retry.';
+    retryInfo.innerText = 'No failed entities to retry.';
     return;
   }
   const res = await fetch('/api/sync', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ selectedEntityIds:lastFailedEntityIds, syncType:'address' }) });
   const d = await res.json();
-  let summary = `Retry batch ${d.batch_id}\nSuccess: ${d.results.filter(r => r.status === 'success').length} / ${d.results.length}\n`;
-  if (d.events && d.events.length > 0) {
-    summary += '\nRetry events:\n';
-    lastFailedEntityIds = [];
-    d.events.forEach((e) => {
-      summary += `  - ${e.entity_name} (${e.entity_id}) => ${e.status} (${e.protocol_used}, code ${e.response_code})\n`;
-      if (e.status === 'failed') lastFailedEntityIds.push(e.entity_id);
-    });
-    if (lastFailedEntityIds.length > 0) {
-      retryInfo.innerText = `Retry still required for ${lastFailedEntityIds.length} entities.`;
-      retryFailBtn.disabled = false;
-    } else {
-      retryInfo.innerText = 'Retry succeeded for all failed entities.';
-      retryFailBtn.disabled = true;
-    }
-  }
-  output.innerText = summary;
+  renderSummary(d, 'Retry Result:');
   await loadProfile();
 };
 
