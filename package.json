@@ -5,14 +5,20 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test:e2e": "node e2e-test.js"
   },
-  "keywords": ["address", "sync", "profile"],
+  "keywords": [
+    "address",
+    "sync",
+    "profile"
+  ],
   "author": "AddressApp",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.4",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "body-parser": "^1.20.2"
+    "express": "^4.18.4",
+    "node-fetch": "^2.7.0"
   }
 }
