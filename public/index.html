@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Address Sync App</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 16px; background:#f7f8fb; }
+    .container { max-width: 900px; margin: auto; background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    h1 { margin-top:0; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap: 12px; }
+    .card { border:1px solid #ddd; padding:12px; border-radius:8px; background:#fff; }
+    button { padding:8px 12px; border:none; background:#2563eb; color:#fff; border-radius:6px; cursor:pointer; }
+    button:disabled { background:#999; }
+    input, select { width: calc(100% - 12px); padding:6px; margin:4px 0; border:1px solid #ccc; border-radius:4px; }
+    pre { background: #111; color:#a9ff9c; border-radius:8px; padding:10px; overflow:auto; max-height:260px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Address Sync Demo</h1>
+  <p>Update master profile and sync to connected entities.</p>
+  <div class="grid">
+    <div class="card">
+      <h3>Master Profile</h3>
+      <div>
+        <label>Full Name</label>
+        <input id="full_name" />
+      </div>
+      <div>
+        <label>Email</label>
+        <input id="email" />
+      </div>
+      <div>
+        <label>Phone</label>
+        <input id="phone" />
+      </div>
+      <div>
+        <label>Address</label>
+        <input id="address_line1" placeholder="Line 1" />
+        <input id="address_line2" placeholder="Line 2" />
+        <input id="city" placeholder="City" />
+        <input id="state_province" placeholder="State" />
+        <input id="postal_code" placeholder="Postal" />
+        <input id="country" placeholder="Country" />
+      </div>
+      <button id="saveProfile">Save Profile</button>
+      <p id="profileStatus"></p>
+    </div>
+    <div class="card">
+      <h3>Connected Entities</h3>
+      <div id="entities"></div>
+      <button id="syncBtn">Sync to selected entities</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top: 12px;">
+    <h3>Sync Output</h3>
+    <pre id="output">Loading...</pre>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
