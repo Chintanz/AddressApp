@@ -52,7 +52,17 @@ const ConnectedEntities = [
   { id: 'entity_27', name: 'LoanServ', category: 'banking', api_protocol: 'REST', endpoint_url: 'https://api.mock/loanserv/update', status: 'active', token_valid: true, icon_name: 'coins' },
   { id: 'entity_28', name: 'PayPortal', category: 'banking', api_protocol: 'SOAP', endpoint_url: 'https://api.mock/payportal/update', status: 'active', token_valid: true, icon_name: 'credit-card' },
   { id: 'entity_29', name: 'InsuranceShield', category: 'insurance', api_protocol: 'REST', endpoint_url: 'https://api.mock/insuranceShield/update', status: 'active', token_valid: true, icon_name: 'shield-check' },
-  { id: 'entity_30', name: 'SecureMail', category: 'utilities', api_protocol: 'GraphQL', endpoint_url: 'https://api.mock/securemail/graphql', status: 'active', token_valid: true, icon_name: 'shield' }
+  { id: 'entity_30', name: 'SecureMail', category: 'utilities', api_protocol: 'GraphQL', endpoint_url: 'https://api.mock/securemail/graphql', status: 'active', token_valid: true, icon_name: 'shield' },
+  { id: 'entity_31', name: 'UK GOV HMRC', category: 'government', api_protocol: 'REST', endpoint_url: 'https://api.mock/uk/hmrc/update', status: 'active', token_valid: true, icon_name: 'crown' },
+  { id: 'entity_32', name: 'UK GOV DVLA', category: 'government', api_protocol: 'SOAP', endpoint_url: 'https://api.mock/uk/dvla/update', status: 'active', token_valid: true, icon_name: 'car' },
+  { id: 'entity_33', name: 'UK GOV NHS', category: 'healthcare', api_protocol: 'GraphQL', endpoint_url: 'https://api.mock/uk/nhs/graphql', status: 'active', token_valid: true, icon_name: 'hospital' },
+  { id: 'entity_34', name: 'Tesco Direct', category: 'retail', api_protocol: 'REST', endpoint_url: 'https://api.mock/uk/tesco/update', status: 'active', token_valid: true, icon_name: 'bag' },
+  { id: 'entity_35', name: 'Sainsbury', category: 'retail', api_protocol: 'SOAP', endpoint_url: 'https://api.mock/uk/sainsbury/update', status: 'active', token_valid: true, icon_name: 'cart' },
+  { id: 'entity_36', name: 'Barclays', category: 'banking', api_protocol: 'REST', endpoint_url: 'https://api.mock/uk/barclays/update', status: 'active', token_valid: true, icon_name: 'shield' },
+  { id: 'entity_37', name: 'NatWest', category: 'banking', api_protocol: 'GraphQL', endpoint_url: 'https://api.mock/uk/natwest/graphql', status: 'active', token_valid: true, icon_name: 'bank' },
+  { id: 'entity_38', name: 'BT', category: 'telecom', api_protocol: 'REST', endpoint_url: 'https://api.mock/uk/bt/update', status: 'active', token_valid: true, icon_name: 'wifi' },
+  { id: 'entity_39', name: 'British Gas', category: 'utilities', api_protocol: 'SOAP', endpoint_url: 'https://api.mock/uk/britishgas/update', status: 'active', token_valid: true, icon_name: 'bolt' },
+  { id: 'entity_40', name: 'Vodafone UK', category: 'telecom', api_protocol: 'GraphQL', endpoint_url: 'https://api.mock/uk/vodafone/graphql', status: 'active', token_valid: true, icon_name: 'signal' }
 ];
 
 const events = [];
